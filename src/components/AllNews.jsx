@@ -29,6 +29,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AppContext from '../AppContext';
 import LoginModal from './LoginModal';
 import LogoutModal from './LogoutModal';
+import AddNewsModal from './AddNewsModal';
 
 
 function TabPanel(props) {
@@ -99,6 +100,7 @@ export default function AllNews() {
       <CssBaseline />
       <LoginModal open={open} handleClose={handleClose}/>
       <LogoutModal open={logoutOpen} handleClose={handleLogoutClose}/>
+      <AddNewsModal open={addNewsOpen} handleClose={handleAddNewsClose}/>
       <Container maxWidth="false">
         <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems="center" sx={{ my: 2 }}>
           {user?.username === null ? (
