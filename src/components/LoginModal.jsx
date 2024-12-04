@@ -119,8 +119,8 @@ export default function LoginModal({ open, handleClose }) {
           />
         </DialogContent>
         <DialogActions>
+          <Button variant='contained' type='submit'>Login</Button>
           <Button variant='outlined' onClick={handleCloseModal}>Cancel</Button>
-          <Button variant='outlined' type='submit'>Login</Button>
         </DialogActions>
       </Dialog>
   )

@@ -25,6 +25,7 @@ import {
   OutlinedInput,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import { red } from '@mui/material/colors';
 
 
 const ITEM_HEIGHT = 48;
@@ -38,7 +39,7 @@ const MenuProps = {
   },
 };
 
-export default function AddNewsModal({ open, handleClose }) {
+export default function AddNewsModal({ open, handleClose, refetch }) {
 
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -94,7 +95,9 @@ export default function AddNewsModal({ open, handleClose }) {
     .then(res => res.json())
     .then(data => {
       if (data?.message === 'News created successfully') {
+        resetStates();
         handleClose();
+        refetch();
       };
     })
     .catch(error => {
@@ -129,7 +132,11 @@ export default function AddNewsModal({ open, handleClose }) {
           component: 'form',
           onSubmit: (event) => {
             event.preventDefault();
-            handleSubmit();
+            if (image && imageName) {
+              handleSubmit();
+            } else {
+              alert('No image selected!');
+            }
           },
         }}
       >
@@ -182,26 +189,27 @@ export default function AddNewsModal({ open, handleClose }) {
               }
             </Select>
           </FormControl>
-          <Grid container spacing={1}>
-            <Button variant='outlined' component='label' fullWidth sx={{ my: 1}}>
-              Select image
-              <input
-                id='image'
-                name='image'
-                type='file'
-                accept='image/*'
-                hidden
-                onChange={onFileChange}
-              />
-            </Button>
-            <Typography variant='caption' sx={{ ml: 1 }}>
-              {image && imageName ? imageName : 'No image selected.'}
-            </Typography>
-          </Grid>
+          <Button variant='outlined' component='label' fullWidth sx={{ my: 1}}>
+            Select image
+            <input
+              id='image'
+              name='image'
+              type='file'
+              accept='image/*'
+              hidden
+              onChange={onFileChange}
+            />
+          </Button>
+          <Typography
+            variant={(!image && !imageName) ? 'body2' : 'caption'}
+            sx={{ ml: 1, color: (!image && !imageName) && red[900] }}
+          >
+            {image && imageName ? imageName : 'Image is required *'}
+          </Typography>
         </DialogContent>
         <DialogActions>
+          <Button variant='contained' type='submit'>Save</Button>
           <Button variant='outlined' onClick={handleCloseModal}>Cancel</Button>
-          <Button variant='outlined' type='submit'>Save</Button>
         </DialogActions>
       </Dialog>
   )
@@ -210,5 +218,6 @@ export default function AddNewsModal({ open, handleClose }) {
 AddNewsModal.propTypes = {
   open: PropTypes.bool,
   handleClose: PropTypes.func,
+  refetch: PropTypes.func,
 }
 

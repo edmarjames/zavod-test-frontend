@@ -21,24 +21,16 @@ import {
   Typography,
 } from '@mui/material';
 
-import {
-  useNavigate
-}     from 'react-router-dom';
-
 // internal imports
 import AppContext from '../AppContext';
 
-export default function LogoutModal({ open, handleClose }) {
-
-  const navigate = useNavigate();
-
-  function handleLogout() {
-    navigate('/logout');
-  };
+export default function ConfirmModal({ open, handleClose, handleClick, usage }) {
 
   return (
     <Dialog open={open}>
-        <DialogTitle>Are you sure you want to logout?</DialogTitle>
+        <DialogTitle>
+          {`Are you sure you want to ${usage === 'logout' ? 'logout' : 'delete'}?`}
+        </DialogTitle>
         <Stack
           direction='row'
           justifyContent='center'
@@ -46,14 +38,16 @@ export default function LogoutModal({ open, handleClose }) {
           spacing={2}
           sx={{ my: 2 }}
         >
-          <Button variant='outlined' onClick={handleLogout}>Yes</Button>
+          <Button variant='contained' onClick={handleClick}>Yes</Button>
           <Button variant='outlined' onClick={handleClose}>Cancel</Button>
         </Stack>
       </Dialog>
   )
 }
 
-LogoutModal.propTypes = {
+ConfirmModal.propTypes = {
   open: PropTypes.bool,
   handleClose: PropTypes.func,
+  handleClick: PropTypes.func,
+  usage: PropTypes.string,
 };

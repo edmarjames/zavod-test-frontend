@@ -1,5 +1,5 @@
 // react imports
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 // external imports
@@ -23,13 +23,18 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import LogoutIcon from '@mui/icons-material/Logout';
+import {
+  useNavigate
+}     from 'react-router-dom';
 
 // internal imports
 import AppContext from '../AppContext';
 import LoginModal from './LoginModal';
-import LogoutModal from './LogoutModal';
+import ConfirmModal from './ConfirmModal';
 import AddNewsModal from './AddNewsModal';
+import NewsCard from './NewsCard';
 
 
 function TabPanel(props) {
@@ -71,7 +76,13 @@ export default function AllNews() {
   const [open, setOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [addNewsOpen, setAddNewsOpen] = useState(false);
+  const [deleteNewsOpen, setDeleteNewsOpen] = useState(false);
+  const [modalUsage, setModalUsage] = useState('');
+  const [deleteId, setDeleteId] = useState(null);
+  const [allNews, setAllNews] = useState([]);
+
   const { user } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -84,9 +95,11 @@ export default function AllNews() {
   };
   const handleLogoutOpen = () => {
     setLogoutOpen(true);
+    setModalUsage('logout');
   };
   const handleLogoutClose = () => {
     setLogoutOpen(false);
+    setModalUsage('');
   };
   const handleAddNewsOpen = () => {
     setAddNewsOpen(true);
@@ -94,13 +107,73 @@ export default function AllNews() {
   const handleAddNewsClose = () => {
     setAddNewsOpen(false);
   };
+  const handleDeleteNewsOpen = (deleteId) => {
+    setDeleteNewsOpen(true);
+    setModalUsage('delete');
+    setDeleteId(deleteId);
+  };
+  const handleDeleteNewsClose = () => {
+    setDeleteNewsOpen(false);
+    setModalUsage('');
+    setDeleteId(null);
+  };
+  function handleLogout() {
+    navigate('/logout');
+  };
+  function fetchNews() {
+    fetch('http://127.0.0.1:8000/api/news/')
+    .then(res => res.json())
+    .then(data => {
+      if (data?.data?.length > 0) {
+        const allNews = data?.data?.map(news => news);
+        setAllNews(allNews);
+      };
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  };
+  function deleteNews(deleteId) {
+    fetch(`http://127.0.0.1:8000/api/news/${deleteId}`, {
+      method: 'DELETE'
+    })
+    .then(res => {
+      if (res.ok) {
+        console.log(res);
+        handleDeleteNewsClose();
+        fetchNews();
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+  useEffect(() => {
+    console.log(allNews);
+  }, [allNews]);
+  useEffect(() => {
+    console.log(deleteId);
+  }, [deleteId]);
 
   return (
     <>
       <CssBaseline />
       <LoginModal open={open} handleClose={handleClose}/>
-      <LogoutModal open={logoutOpen} handleClose={handleLogoutClose}/>
-      <AddNewsModal open={addNewsOpen} handleClose={handleAddNewsClose}/>
+      <AddNewsModal
+        open={addNewsOpen}
+        handleClose={handleAddNewsClose}
+        refetch={fetchNews}
+      />
+      <ConfirmModal
+        open={logoutOpen || deleteNewsOpen}
+        handleClose={logoutOpen ? handleLogoutClose : handleDeleteNewsClose}
+        handleClick={logoutOpen ? handleLogout : () => deleteNews(deleteId)}
+        usage={modalUsage}
+      />
       <Container maxWidth="false">
         <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems="center" sx={{ my: 2 }}>
           {user?.username === null ? (
@@ -123,7 +196,18 @@ export default function AllNews() {
               <Tab label="News Statistics" {...a11yProps(1)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-              News
+              {allNews?.length > 0 ? (
+                <Grid container spacing={3}>
+                  {allNews.map(news => (
+                    <Grid size={4}>
+                      <NewsCard key={news.id} newsData={news} handleDeleteNewsOpen={handleDeleteNewsOpen}/>
+                    </Grid>
+                  ))}
+                </Grid>
+              ) : (
+                <div>No news yet.</div>
+              )}
+
             </TabPanel>
             <TabPanel value={value} index={1}>
               News Statistics
