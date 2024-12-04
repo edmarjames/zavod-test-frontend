@@ -1,5 +1,5 @@
 // react imports
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 // import './App.css'
@@ -13,19 +13,45 @@ import {
 }     from 'react-router-dom';
 
 // internal imports
+import { AppProvider } from './AppContext';
 import AllNews from './components/AllNews';
+import Logout from './components/Logout';
+
 
 function App() {
 
+  const [user, setUser] = useState({
+    username: null,
+    isAdmin: false
+  });
+
+  const localStorageUsername = localStorage.getItem('username');
+  const localStorageIsAdmin = localStorage.getItem('isAdmin');
+
+  function getUserData(username, isAdmin) {
+    if (username !== null && isAdmin !== null) {
+      setUser({
+        username: username,
+        isAdmin: isAdmin
+      })
+    }
+  };
+
+  useEffect(() => {
+    getUserData(localStorageUsername, localStorageIsAdmin);
+  }, [localStorageUsername, localStorageIsAdmin]);
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/news" />} />
-        <Route path="/news" element={<AllNews />} />
-      </Routes>
-    </Router>
+    <AppProvider value={{user, setUser}}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/news" />} />
+          <Route path="/news" element={<AllNews />} />
+          <Route path="/logout" element={<Logout />} />
+        </Routes>
+      </Router>
+    </AppProvider>
+  );
+};
 
-  )
-}
-
-export default App
+export default App;
