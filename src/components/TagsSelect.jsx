@@ -70,7 +70,7 @@ export default function TagsSelect({ tags, handleChangeTag }) {
         {tagsQuery && tagsQuery?.data?.length > 0 ?
           tagsQuery?.data.map((tag) => (
             <MenuItem key={tag.id} value={tag.id}>{tag.name}</MenuItem>
-          )) : 'Loading...'
+          )) : <MenuItem value='Loading' disabled>Loading...</MenuItem>
         }
       </Select>
     </FormControl>

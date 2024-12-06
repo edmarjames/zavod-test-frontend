@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   Button,
   Card,
@@ -39,13 +40,44 @@ import {
   NavLink,
   Link
 }     from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // internal imports
 import AppContext from '../AppContext';
 
-export default function NewsCard({ newsData, handleDeleteNewsOpen }) {
+export default function NewsCard({ newsData, handleDeleteNewsOpen, tagsFilter }) {
 
   const { user } = useContext(AppContext);
+  const queryClient = useQueryClient();
+
+  const patchAction = async (action) => {
+    const response = await fetch(`http://127.0.0.1:8000/api/news/${newsData?.id}?action=${action}`, {
+      method: 'PATCH',
+    });
+
+    if (!response.ok) {
+      throw new Error('Operation failed');
+    }
+
+    return response.json();
+  };
+  const userMutation = useMutation({
+    mutationFn: patchAction,
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries(['news', 'infinite', tagsFilter], { exact: true });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  function handleLike() {
+    userMutation.mutate('like');
+  };
+  function handleDisLike() {
+    userMutation.mutate('dislike');
+  };
 
   return (
     <div>
@@ -78,7 +110,7 @@ export default function NewsCard({ newsData, handleDeleteNewsOpen }) {
               ))}
             </Stack>
           ) : (
-              <Typography variant='caption'>No tags defined.</Typography>
+              <Typography variant='caption'>No tags.</Typography>
           )}
         </CardContent>
         {user?.isAdmin && (
@@ -100,11 +132,15 @@ export default function NewsCard({ newsData, handleDeleteNewsOpen }) {
         )}
         {!user?.isAdmin && (
           <Stack direction='row' spacing={1} sx={{ justifyContent: 'center', alignItems: 'center'}}>
-            <IconButton>
-              <ThumbUpOffAltIcon/>
+            <IconButton onClick={handleLike} disabled={userMutation?.isLoading}>
+              <Badge badgeContent={newsData?.likes} color='info' showZero>
+                <ThumbUpOffAltIcon/>
+              </Badge>
             </IconButton>
-            <IconButton>
-              <ThumbDownOffAltIcon/>
+            <IconButton onClick={handleDisLike} disabled={userMutation?.isLoading}>
+              <Badge badgeContent={newsData?.dislikes} color='info' showZero>
+                <ThumbDownOffAltIcon/>
+              </Badge>
             </IconButton>
             <MuiLink as={NavLink} to={`/news/${newsData?.id}`} underline='hover'>Read more</MuiLink>
           </Stack>
@@ -117,5 +153,6 @@ export default function NewsCard({ newsData, handleDeleteNewsOpen }) {
 NewsCard.propTypes = {
   newsData: PropTypes.object,
   handleDeleteNewsOpen: PropTypes.func,
+  tagsFilter: PropTypes.array,
 };
 

@@ -238,6 +238,7 @@ export default function AllNews() {
       return nextPage <= lastPage.total_pages ? nextPage : undefined;
     },
     queryFn: ({ pageParam }) => fetchNews({ pageParam, tags: tagsFilter }),
+    // refetchInterval: 3000
   });
 
   const observerRef = useRef();
@@ -276,6 +277,9 @@ export default function AllNews() {
   useEffect(() => {
     console.log(tagsFilter);
   }, [tagsFilter]);
+  useEffect(() => {
+    console.log(flattenedNews);
+  }, [flattenedNews]);
 
   return (
     <>
@@ -329,9 +333,21 @@ export default function AllNews() {
               <Grid container spacing={3}>
                 {flattenedNews?.map((news) => (
                   <Grid size={4}>
-                    <NewsCard key={news.id} newsData={news} handleDeleteNewsOpen={handleDeleteNewsOpen}/>
+                    <NewsCard key={news.id} newsData={news} handleDeleteNewsOpen={handleDeleteNewsOpen} tagsFilter={tagsFilter}/>
                   </Grid>
                 ))}
+                {flattenedNews?.length === 0 && (
+                  <Stack
+                    sx={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: '100%',
+                      mt: 5,
+                    }}
+                  >
+                    <Typography variant='h3'>No data to display</Typography>
+                  </Stack>
+                )}
               </Grid>
               <div
                 ref={observerRef}

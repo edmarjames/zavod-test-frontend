@@ -170,7 +170,7 @@ export default function StatisticsDashboard() {
         </Grid>
         <Grid size={7}>
           <Paper elevation={1}>
-          {xLabels && yNewsCount && yViewsCount ? (
+          {xLabels && yNewsCount && yViewsCount && (
             <Box sx={{ width: '100%', height: '400px' }}>
               <BarChart
                 series={[
@@ -181,8 +181,6 @@ export default function StatisticsDashboard() {
                 skipAnimation
               />
             </Box>
-          ) : (
-            <Box>No news yet.</Box>
           )}
           </Paper>
         </Grid>

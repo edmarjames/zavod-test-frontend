@@ -29,8 +29,8 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import {
@@ -54,7 +54,8 @@ export default function NewsView() {
   };
   const newsDataQuery = useQuery({
     queryKey: ['data'],
-    queryFn: fetchNewsData
+    queryFn: fetchNewsData,
+    refetchInterval: 3000
   });
   const handleBack = () => {
     navigate('/news');
@@ -103,17 +104,17 @@ export default function NewsView() {
             <Stack direction='row' spacing={2}>
               <Badge
                 badgeContent={newsDataQuery?.data?.likes}
-                color='primary'
+                color='info'
                 showZero
               >
-                <ThumbUpIcon/>
+                <ThumbUpOffAltIcon/>
               </Badge>
               <Badge
                 badgeContent={newsDataQuery?.data?.dislikes}
-                color='primary'
+                color='info'
                 showZero
               >
-                <ThumbDownAltIcon/>
+                <ThumbDownOffAltIcon/>
               </Badge>
             </Stack>
           </Stack>
