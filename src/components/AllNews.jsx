@@ -37,6 +37,7 @@ import ConfirmModal from './ConfirmModal';
 import AddNewsModal from './AddNewsModal';
 import NewsCard from './NewsCard';
 import TagsSelect from './TagsSelect';
+import StatisticsDashboard from './StatisticsDashboard';
 
 
 function TabPanel(props) {
@@ -307,7 +308,7 @@ export default function AllNews() {
           )}
         </Stack>
         <Box sx={{ width: '100%' }}>
-          <Paper elevation={1} square>
+          <Paper elevation={1}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
               <Tab label="News" {...a11yProps(0)} />
               <Tab label="News Statistics" {...a11yProps(1)} />
@@ -349,7 +350,7 @@ export default function AllNews() {
               )}
             </TabPanel>
             <TabPanel value={value} index={1}>
-              News Statistics
+              <StatisticsDashboard/>
             </TabPanel>
           </Paper>
         </Box>

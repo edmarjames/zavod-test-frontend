@@ -21,6 +21,7 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
+  Link as MuiLink,
   Paper,
   Stack,
   Tab,
@@ -31,7 +32,13 @@ import {
 } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { lightBlue, red } from '@mui/material/colors';
+import {
+  NavLink,
+  Link
+}     from 'react-router-dom';
 
 // internal imports
 import AppContext from '../AppContext';
@@ -74,23 +81,34 @@ export default function NewsCard({ newsData, handleDeleteNewsOpen }) {
               <Typography variant='caption'>No tags defined.</Typography>
           )}
         </CardContent>
-        <CardActions>
-          {user?.isAdmin && (
-            <Button
-              variant='contained'
-              fullWidth
-              sx={{ bgcolor: red[400]}}
-              onClick={() => handleDeleteNewsOpen(newsData?.id)}
-            >
-              <Stack direction='row' alignContent='center'>
-                <DeleteOutlineIcon fontSize='small'/>
-                Delete
-              </Stack>
-            </Button>
-          )}
-          {/* <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button> */}
-        </CardActions>
+        {user?.isAdmin && (
+          <CardActions>
+              <Button
+                variant='contained'
+                fullWidth
+                sx={{ bgcolor: red[400]}}
+                onClick={() => handleDeleteNewsOpen(newsData?.id)}
+              >
+                <Stack direction='row' alignContent='center'>
+                  <DeleteOutlineIcon fontSize='small'/>
+                  Delete
+                </Stack>
+              </Button>
+            {/* <Button size="small">Share</Button>
+            <Button size="small">Learn More</Button> */}
+          </CardActions>
+        )}
+        {!user?.isAdmin && (
+          <Stack direction='row' spacing={1} sx={{ justifyContent: 'center', alignItems: 'center'}}>
+            <IconButton>
+              <ThumbUpOffAltIcon/>
+            </IconButton>
+            <IconButton>
+              <ThumbDownOffAltIcon/>
+            </IconButton>
+            <MuiLink as={NavLink} to={`/news/${newsData?.id}`} underline='hover'>Read more</MuiLink>
+          </Stack>
+        )}
       </Card>
     </div>
   )

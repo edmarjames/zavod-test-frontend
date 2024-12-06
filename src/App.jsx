@@ -16,6 +16,7 @@ import {
 import { AppProvider } from './AppContext';
 import AllNews from './components/AllNews';
 import Logout from './components/Logout';
+import NewsView from './components/NewsView';
 
 
 function App() {
@@ -45,9 +46,10 @@ function App() {
     <AppProvider value={{user, setUser}}>
       <Router>
         <Routes>
-          <Route path="/" element={<Navigate to="/news" />} />
-          <Route path="/news" element={<AllNews />} />
-          <Route path="/logout" element={<Logout />} />
+          <Route path="/" element={<Navigate to="/news"/>}/>
+          <Route path="/news" element={<AllNews/>}/>
+          <Route path="/news/:newsId" element={<NewsView/>}/>
+          <Route path="/logout" element={<Logout/>}/>
         </Routes>
       </Router>
     </AppProvider>
