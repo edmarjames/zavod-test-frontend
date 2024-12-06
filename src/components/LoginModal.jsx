@@ -1,28 +1,23 @@
-import React, { useState, useContext } from 'react'
-import PropTypes from 'prop-types'
+// react imports
+import React, {
+  useContext,
+  useState,
+}                                           from 'react';
+import PropTypes                            from 'prop-types';
 
 // external imports
 import {
-  AppBar,
-  Box,
   Button,
-  Container,
-  CssBaseline,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
-  Paper,
-  Stack,
-  Tab,
-  Tabs,
   TextField,
   Typography,
-} from '@mui/material';
+}                                           from '@mui/material';
 
 // internal imports
-import AppContext from '../AppContext';
+import AppContext                           from '../AppContext';
 
 
 export default function LoginModal({ open, handleClose }) {
@@ -73,7 +68,6 @@ export default function LoginModal({ open, handleClose }) {
         setError(data?.error);
         resetStates();
       };
-      console.log(data);
     })
   };
 
@@ -124,7 +118,7 @@ export default function LoginModal({ open, handleClose }) {
         </DialogActions>
       </Dialog>
   )
-}
+};
 
 LoginModal.propTypes = {
   open: PropTypes.bool,

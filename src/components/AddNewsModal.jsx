@@ -1,36 +1,27 @@
-import React, { useState, useContext, useEffect } from 'react'
-import PropTypes from 'prop-types'
+// react imports
+import React, {
+  useState
+}                                           from 'react';
+import PropTypes                            from 'prop-types';
 
 // external imports
 import {
-  AppBar,
-  Box,
   Button,
-  Container,
-  CssBaseline,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
-  Paper,
-  Stack,
-  Tab,
-  Tabs,
   TextField,
   Typography,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
-  OutlinedInput,
-} from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { red } from '@mui/material/colors';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+}                                           from '@mui/material';
+import { red }                              from '@mui/material/colors';
+import {
+  useMutation,
+  useQueryClient,
+}                                           from '@tanstack/react-query';
 
 // internal imports
-import TagsSelect from './TagsSelect';
+import TagsSelect                           from './TagsSelect';
 
 export default function AddNewsModal({ open, handleClose, tagsFilter }) {
 
@@ -39,7 +30,6 @@ export default function AddNewsModal({ open, handleClose, tagsFilter }) {
   const [tags, setTags] = useState([]);
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
-  const [allTags, setAllTags] = useState([]);
   const queryClient = useQueryClient();
 
   function handleChangeTitle(e) {
@@ -87,10 +77,8 @@ export default function AddNewsModal({ open, handleClose, tagsFilter }) {
     mutationFn: createNews,
     onSuccess: (data) => {
       if (data?.message === 'News created successfully') {
-        resetStates(); // Reset form fields or state
-        handleClose(); // Close modal
-        // Invalidate the infinite query to refresh the list
-        // queryClient.invalidateQueries(['news', 'infinite']);
+        resetStates();
+        handleClose();
 
         queryClient.setQueryData(['news', 'infinite', tagsFilter], (oldData) => {
           if (!oldData) return;
@@ -100,23 +88,13 @@ export default function AddNewsModal({ open, handleClose, tagsFilter }) {
               if (index === 0) {
                 return {
                   ...page,
-                  data: [data.data, ...page.data], // Prepend the new news to the first page
+                  data: [data.data, ...page.data],
                 };
               }
               return page;
             }),
           };
         });
-
-        // queryClient.setQueryData(['news', 'infinite'], {
-        //   pages: [], // Reset pages to an empty array
-        //   pageParams: [],
-        // });
-
-        // queryClient.invalidateQueries({
-        //   queryKey: ['news', 'infinite', tagsFilter],
-        //   exact: true,
-        // });
 
         queryClient.invalidateQueries(['news', 'infinite', tagsFilter], { exact: true });
       }
@@ -134,54 +112,6 @@ export default function AddNewsModal({ open, handleClose, tagsFilter }) {
 
     createNewsMutation.mutate(formData);
   };
-  // function handleSubmit() {
-  //   const formData = new FormData();
-  //   formData.append('title', title);
-  //   formData.append('text', text);
-  //   formData.append('image', image);
-  //   tags.forEach((tag) => formData.append('tags', tag));
-  //   // formData.append('tags', tags.map(tags => tags));
-
-  //   fetch('http://127.0.0.1:8000/api/news/', {
-  //     method: 'POST',
-  //     body: formData,
-  //     headers: {
-  //         // 'Content-Type': 'multipart/form-data',
-  //     },
-  //   })
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     if (data?.message === 'News created successfully') {
-  //       resetStates();
-  //       handleClose();
-  //       refetch();
-  //     };
-  //   })
-  //   .catch(error => {
-  //     console.error(error);
-  //   });
-  // };
-
-  // function getTags() {
-  //   fetch('http://127.0.0.1:8000/api/tags/')
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     if (data?.message === 'Data successfully retrieved') {
-  //       const allTags = data?.data?.map(tags => tags);
-  //       setAllTags(allTags);
-  //     }
-  //   })
-  //   .catch(error => {
-  //     console.error(error);
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   getTags();
-  // }, []);
-  useEffect(() => {
-    console.log(tags);
-  }, [tags]);
 
   return (
     <Dialog
@@ -248,16 +178,18 @@ export default function AddNewsModal({ open, handleClose, tagsFilter }) {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button variant='contained' type='submit'>{createNewsMutation?.isLoading ? 'Saving..' : 'Save'}</Button>
+          <Button variant='contained' type='submit'>
+            {createNewsMutation?.isLoading ? 'Saving..' : 'Save'}
+          </Button>
           <Button variant='outlined' onClick={handleCloseModal}>Cancel</Button>
         </DialogActions>
       </Dialog>
   )
-}
+};
 
 AddNewsModal.propTypes = {
   open: PropTypes.bool,
   handleClose: PropTypes.func,
   tagsFilter: PropTypes.array,
-}
+};
 

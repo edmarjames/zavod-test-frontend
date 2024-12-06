@@ -1,22 +1,19 @@
 // react imports
-import { useState, useEffect } from 'react';
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
+import { useState, useEffect }              from 'react';
 
 // external imports
 import {
   BrowserRouter as Router,
-  Routes,
+  Navigate,
   Route,
-  Navigate
-}     from 'react-router-dom';
+  Routes,
+}                                           from 'react-router-dom';
 
 // internal imports
-import { AppProvider } from './AppContext';
-import AllNews from './components/AllNews';
-import Logout from './components/Logout';
-import NewsView from './components/NewsView';
+import { AppProvider }                      from './AppContext';
+import AllNews                              from './components/AllNews';
+import Logout                               from './components/Logout';
+import NewsView                             from './components/NewsView';
 
 
 function App() {
@@ -46,10 +43,10 @@ function App() {
     <AppProvider value={{user, setUser}}>
       <Router>
         <Routes>
-          <Route path="/" element={<Navigate to="/news"/>}/>
-          <Route path="/news" element={<AllNews/>}/>
-          <Route path="/news/:newsId" element={<NewsView/>}/>
-          <Route path="/logout" element={<Logout/>}/>
+          <Route path='/' element={<Navigate to='/news'/>}/>
+          <Route path='/news' element={<AllNews/>}/>
+          <Route path='/news/:newsId' element={<NewsView/>}/>
+          <Route path='/logout' element={<Logout/>}/>
         </Routes>
       </Router>
     </AppProvider>

@@ -1,33 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+// react imports
+import React                                from 'react';
+import PropTypes                            from 'prop-types';
 
 // external imports
 import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  CssBaseline,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Paper,
-  Stack,
-  Tab,
-  Tabs,
-  TextField,
-  Typography,
+  FormControl,
   InputLabel,
   MenuItem,
-  FormControl,
-  Select,
   OutlinedInput,
-} from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { red } from '@mui/material/colors';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+  Select,
+}                                           from '@mui/material';
+import { useQuery }                         from '@tanstack/react-query';
 
 
 const ITEM_HEIGHT = 48;
@@ -56,15 +39,15 @@ export default function TagsSelect({ tags, handleChangeTag }) {
 
   return (
     <FormControl required fullWidth sx={{ my: 1 }}>
-      <InputLabel id="tags-select-label">Tags</InputLabel>
+      <InputLabel id='tags-select-label'>Tags</InputLabel>
       <Select
-        labelId="tags-select-label"
-        id="tags-select"
+        labelId='tags-select-label'
+        id='tags-select'
         multiple
         value={tags}
-        label="tags"
+        label='tags'
         onChange={handleChangeTag}
-        input={<OutlinedInput label="Tags" />}
+        input={<OutlinedInput label='Tags' />}
         MenuProps={MenuProps}
       >
         {tagsQuery && tagsQuery?.data?.length > 0 ?

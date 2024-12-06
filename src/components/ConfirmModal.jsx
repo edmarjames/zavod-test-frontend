@@ -1,28 +1,15 @@
-import React, { useState, useContext } from 'react'
-import PropTypes from 'prop-types'
+// react imports
+import React                                from 'react';
+import PropTypes                            from 'prop-types';
 
 // external imports
 import {
-  AppBar,
-  Box,
   Button,
-  Container,
-  CssBaseline,
   Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
   DialogTitle,
-  Paper,
   Stack,
-  Tab,
-  Tabs,
-  TextField,
-  Typography,
-} from '@mui/material';
+}                                           from '@mui/material';
 
-// internal imports
-import AppContext from '../AppContext';
 
 export default function ConfirmModal({ open, handleClose, handleClick, usage }) {
 
@@ -43,7 +30,7 @@ export default function ConfirmModal({ open, handleClose, handleClick, usage }) 
         </Stack>
       </Dialog>
   )
-}
+};
 
 ConfirmModal.propTypes = {
   open: PropTypes.bool,

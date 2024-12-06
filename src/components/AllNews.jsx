@@ -1,43 +1,43 @@
 // react imports
-import React, { useState, useContext, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useRef
+}                                           from 'react';
+import PropTypes                            from 'prop-types';
 
 // external imports
 import {
-  AppBar,
   Box,
   Button,
   Container,
   CssBaseline,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   IconButton,
   Paper,
   Stack,
   Tab,
   Tabs,
-  TextField,
   Tooltip,
   Typography,
-} from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import LogoutIcon from '@mui/icons-material/Logout';
+}                                           from '@mui/material';
+import                                      Grid from '@mui/material/Grid2';
+import LogoutIcon                           from '@mui/icons-material/Logout';
+import { useNavigate }                      from 'react-router-dom';
 import {
-  useNavigate
-}     from 'react-router-dom';
-import { useInfiniteQuery, useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+}                                           from '@tanstack/react-query';
 
 // internal imports
-import AppContext from '../AppContext';
-import LoginModal from './LoginModal';
-import ConfirmModal from './ConfirmModal';
-import AddNewsModal from './AddNewsModal';
-import NewsCard from './NewsCard';
-import TagsSelect from './TagsSelect';
-import StatisticsDashboard from './StatisticsDashboard';
+import AppContext                           from '../AppContext';
+import LoginModal                           from './LoginModal';
+import ConfirmModal                         from './ConfirmModal';
+import AddNewsModal                         from './AddNewsModal';
+import NewsCard                             from './NewsCard';
+import TagsSelect                           from './TagsSelect';
+import StatisticsDashboard                  from './StatisticsDashboard';
 
 
 function TabPanel(props) {
@@ -45,7 +45,7 @@ function TabPanel(props) {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
@@ -88,9 +88,9 @@ export default function AllNews() {
 
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
+  const observerRef = useRef();
 
   const handleChange = (event, newValue) => {
-    console.log(newValue);
     if (newValue === 0) {
       queryClient.setQueryData(['news', 'infinite', tagsFilter], {
         pages: [],
@@ -140,43 +140,11 @@ export default function AllNews() {
     } = e;
     setTagsFilter(value);
   };
-  // function fetchNews() {
-  //   fetch('http://127.0.0.1:8000/api/news/')
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     if (data?.data?.length > 0) {
-  //       const allNews = data?.data?.map(news => news);
-  //       setAllNews(allNews);
-  //     };
-  //   })
-  //   .catch(error => {
-  //     console.error(error);
-  //   });
-  // };
-
   function fetchNews({ pageParam = 1, tags = [] }) {
     const tagsQuery = tags?.length > 0 ? tags.map(tag => `&tags=${tag}`).join('') : '';
     return fetch(`http://127.0.0.1:8000/api/news/?page=${pageParam}&page_size=3${tagsQuery}`)
       .then(res => res.json())
   };
-
-  // function deleteNews(deleteId) {
-  //   fetch(`http://127.0.0.1:8000/api/news/${deleteId}`, {
-  //     method: 'DELETE'
-  //   })
-  //   .then(res => {
-  //     if (res.ok) {
-  //       console.log(res);
-  //       handleDeleteNewsClose();
-  //       fetchNews();
-  //     }
-  //   })
-  //   .catch(error => {
-  //     console.error(error);
-  //   });
-  // };
-
-  // Mutation for deleting news
   const deleteNewsMutation = useMutation({
     mutationFn: (deleteId) =>
       fetch(`http://127.0.0.1:8000/api/news/${deleteId}`, {
@@ -185,47 +153,30 @@ export default function AllNews() {
         if (!res.ok) {
           throw new Error('Failed to delete news');
         }
-        // return res.json();
       }),
-    onSuccess: (_, deleteId) => {
-      console.log(`News with ID ${deleteId} deleted successfully`);
-      handleDeleteNewsClose(); // Close the delete modal
+    onSuccess: () => {
+      handleDeleteNewsClose();
 
-      // Update the query data manually
       queryClient.setQueryData(['news', 'infinite', tagsFilter], (oldData) => {
         if (!oldData) return;
         return {
           ...oldData,
           pages: oldData.pages.map((page) => ({
             ...page,
-            data: page.data.filter((news) => news.id !== deleteId), // Exclude the deleted news
+            data: page.data.filter((news) => news.id !== deleteId),
           })),
         };
       });
 
-      // queryClient.setQueryData(['news', 'infinite'], {
-      //   pages: [], // Reset pages to an empty array
-      //   pageParams: [],
-      // });
-
-      // queryClient.invalidateQueries({
-      //   queryKey: ['news', 'infinite', tagsFilter],
-      //   exact: true,
-      // });
-
       queryClient.invalidateQueries(['news', 'infinite', tagsFilter], { exact: true });
-
     },
     onError: (error) => {
       console.error('Error deleting news:', error);
     },
   });
-
   const handleDelete = (deleteId) => {
     deleteNewsMutation.mutate(deleteId);
   };
-
-
   const {
     data,
     fetchNextPage,
@@ -238,24 +189,18 @@ export default function AllNews() {
       return nextPage <= lastPage.total_pages ? nextPage : undefined;
     },
     queryFn: ({ pageParam }) => fetchNews({ pageParam, tags: tagsFilter }),
-    // refetchInterval: 3000
   });
 
-  const observerRef = useRef();
   const flattenedNews = data?.pages.flatMap((page) => page.data) || [];
 
-  // useEffect(() => {
-  //   fetchNews();
-  // }, []);
   useEffect(() => {
-    console.log('RUNNING HERE');
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
-      { threshold: 1.0 } // Trigger when the element is fully in view
+      { threshold: 1.0 }
     );
 
     if (observerRef.current) {
@@ -268,18 +213,6 @@ export default function AllNews() {
       }
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
-  useEffect(() => {
-    console.log(allNews);
-  }, [allNews]);
-  useEffect(() => {
-    console.log(deleteId);
-  }, [deleteId]);
-  useEffect(() => {
-    console.log(tagsFilter);
-  }, [tagsFilter]);
-  useEffect(() => {
-    console.log(flattenedNews);
-  }, [flattenedNews]);
 
   return (
     <>
@@ -296,10 +229,16 @@ export default function AllNews() {
         handleClick={logoutOpen ? handleLogout : () => handleDelete(deleteId)}
         usage={modalUsage}
       />
-      <Container maxWidth="false">
-        <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems="center" sx={{ my: 2 }}>
+      <Container maxWidth='false'>
+        <Stack
+          direction='row'
+          spacing={2}
+          justifyContent='flex-end'
+          alignItems='center'
+          sx={{ my: 2 }}
+        >
           {user?.username === null ? (
-            <Button variant="outlined" onClick={handleClickOpen}>Login as admin</Button>
+            <Button variant='outlined' onClick={handleClickOpen}>Login as admin</Button>
           ) : (
             <>
               <Button variant='outlined' onClick={handleAddNewsOpen}>Add news</Button>
@@ -313,27 +252,21 @@ export default function AllNews() {
         </Stack>
         <Box sx={{ width: '100%' }}>
           <Paper elevation={1}>
-            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="News" {...a11yProps(0)} />
-              <Tab label="News Statistics" {...a11yProps(1)} />
+            <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
+              <Tab label='News' {...a11yProps(0)} />
+              <Tab label='News Statistics' {...a11yProps(1)} />
             </Tabs>
             <TabPanel value={value} index={0}>
               <TagsSelect tags={tagsFilter} handleChangeTag={handleChangeTag}/>
-              {/* {allNews?.length > 0 ? (
-                <Grid container spacing={3}>
-                  {allNews.map(news => (
-                    <Grid size={4}>
-                      <NewsCard key={news.id} newsData={news} handleDeleteNewsOpen={handleDeleteNewsOpen}/>
-                    </Grid>
-                  ))}
-                </Grid>
-              ) : (
-                <div>No news yet.</div>
-              )} */}
               <Grid container spacing={3}>
                 {flattenedNews?.map((news) => (
                   <Grid size={4}>
-                    <NewsCard key={news.id} newsData={news} handleDeleteNewsOpen={handleDeleteNewsOpen} tagsFilter={tagsFilter}/>
+                    <NewsCard
+                      key={news.id}
+                      newsData={news}
+                      handleDeleteNewsOpen={handleDeleteNewsOpen}
+                      tagsFilter={tagsFilter}
+                    />
                   </Grid>
                 ))}
                 {flattenedNews?.length === 0 && (
@@ -357,7 +290,7 @@ export default function AllNews() {
                   backgroundColor: 'transparent',
                 }}
               >
-                {/* This is the "observer div" */}
+                {/* This is the observer div */}
               </div>
               {isFetchingNextPage && (
                 <Stack direction='row' justifyContent='center'>
@@ -373,9 +306,5 @@ export default function AllNews() {
       </Container>
     </>
   )
-}
-
-// AllNews.propTypes = {
-
-// }
+};
 

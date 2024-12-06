@@ -1,8 +1,14 @@
-import React, { useContext, useEffect }  from 'react'
+// react imports
+import React, {
+  useContext,
+  useEffect,
+}                                           from 'react';
 
-import { Navigate } 					from 'react-router-dom';
+// external imports
+import { Navigate } 					              from 'react-router-dom';
 
-import AppContext 						from '../AppContext';
+// internal imports
+import AppContext 						              from '../AppContext';
 
 
 export default function Logout() {
@@ -18,6 +24,6 @@ export default function Logout() {
 });
 
   return (
-    <Navigate to="/" />
+    <Navigate to='/' />
   )
 }

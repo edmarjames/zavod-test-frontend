@@ -1,32 +1,21 @@
-import React, { useState, useContext, useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
+// react imports
+import React, {
+  useEffect,
+  useState,
+}                                           from 'react';
 
 // external imports
 import {
-  AppBar,
   Box,
-  Button,
-  Container,
-  CssBaseline,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
   Paper,
   Stack,
-  Tab,
-  Tabs,
-  TextField,
-  Tooltip,
   Typography,
-} from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { BarChart } from '@mui/x-charts/BarChart';
-import { DataGrid } from '@mui/x-data-grid';
-import { blue } from '@mui/material/colors';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+}                                           from '@mui/material';
+import Grid                                 from '@mui/material/Grid2';
+import { BarChart }                         from '@mui/x-charts/BarChart';
+import { blue }                             from '@mui/material/colors';
+import { DataGrid }                         from '@mui/x-data-grid';
+import { useQuery }                         from '@tanstack/react-query';
 
 
 const columns = [
@@ -35,7 +24,7 @@ const columns = [
     headerName: 'ID',
     type: 'number',
     flex: 1,
-    resizable: false,
+    // resizable: false,
     headerAlign: 'left',
     align: 'left'
   },
@@ -44,7 +33,7 @@ const columns = [
     headerName: 'Title',
     type: 'string',
     flex: 1,
-    resizable: false,
+    // resizable: false,
     headerAlign: 'left',
     align: 'left'
   },
@@ -95,8 +84,7 @@ export default function StatisticsDashboard() {
 
   function getStatistics() {
     return fetch('http://127.0.0.1:8000/api/news/statistics/')
-      .then(res => res.json())
-      // .then(data => data?.data || []);
+      .then(res => res.json());
   };
 
   const statsQuery = useQuery({
@@ -107,12 +95,12 @@ export default function StatisticsDashboard() {
   const newsPerTagStats = statsQuery?.data?.news_per_tag || {};
   const newsStatsHolder = statsQuery?.data?.news_stats || {};
   const options = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
   };
 
   useEffect(() => {
@@ -142,8 +130,6 @@ export default function StatisticsDashboard() {
         }
       });
       setNewsStats(filteredData);
-      console.log(filteredData);
-      // console.log(newsStatsHolder);
     };
   }, [newsStatsHolder]);
 
@@ -205,9 +191,5 @@ export default function StatisticsDashboard() {
       </Grid>
     </Box>
   )
-}
-
-// StatisticsDashboard.propTypes = {
-
-// }
+};
 

@@ -1,49 +1,37 @@
 // react imports
-import React, { useState, useContext, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React, { useContext }                from 'react';
+import PropTypes                            from 'prop-types';
 
 // external imports
 import {
-  AppBar,
   Avatar,
   Badge,
-  Box,
   Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
   Chip,
-  Container,
-  CssBaseline,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   IconButton,
   Link as MuiLink,
-  Paper,
   Stack,
-  Tab,
-  Tabs,
-  TextField,
-  Tooltip,
   Typography,
-} from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import { lightBlue, red } from '@mui/material/colors';
+}                                           from '@mui/material';
+import DeleteOutlineIcon                    from '@mui/icons-material/DeleteOutline';
+import ThumbDownOffAltIcon                  from '@mui/icons-material/ThumbDownOffAlt';
+import ThumbUpOffAltIcon                    from '@mui/icons-material/ThumbUpOffAlt';
 import {
-  NavLink,
-  Link
-}     from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+  lightBlue,
+  red,
+}                                           from '@mui/material/colors';
+import { NavLink }                          from 'react-router-dom';
+import {
+  useMutation,
+  useQueryClient,
+}                                           from '@tanstack/react-query';
 
 // internal imports
-import AppContext from '../AppContext';
+import AppContext                           from '../AppContext';
 
 export default function NewsCard({ newsData, handleDeleteNewsOpen, tagsFilter }) {
 
@@ -64,7 +52,6 @@ export default function NewsCard({ newsData, handleDeleteNewsOpen, tagsFilter })
   const userMutation = useMutation({
     mutationFn: patchAction,
     onSuccess: (data) => {
-      console.log(data);
       queryClient.invalidateQueries(['news', 'infinite', tagsFilter], { exact: true });
     },
     onError: (error) => {
@@ -87,10 +74,10 @@ export default function NewsCard({ newsData, handleDeleteNewsOpen, tagsFilter })
           image={newsData?.image}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant='h5' component='div'>
             {newsData?.title}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          <Typography variant='body2' sx={{ color: 'text.secondary' }}>
             {`${newsData?.text.slice(0 , 95)}...`}
           </Typography>
           {newsData?.tags?.length > 0 ? (
@@ -126,8 +113,6 @@ export default function NewsCard({ newsData, handleDeleteNewsOpen, tagsFilter })
                   Delete
                 </Stack>
               </Button>
-            {/* <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button> */}
           </CardActions>
         )}
         {!user?.isAdmin && (
@@ -148,7 +133,7 @@ export default function NewsCard({ newsData, handleDeleteNewsOpen, tagsFilter })
       </Card>
     </div>
   )
-}
+};
 
 NewsCard.propTypes = {
   newsData: PropTypes.object,
