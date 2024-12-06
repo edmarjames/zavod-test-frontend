@@ -31,9 +31,18 @@ export default function NewsView() {
       .then(res => res.json())
       .then(data => data.data);
   };
+  function fetchLikesDislikes() {
+    return fetch(`http://127.0.0.1:8000/api/news/${newsId}?filtered=true`)
+      .then(res => res.json())
+      .then(data => data.data);
+  };
   const newsDataQuery = useQuery({
-    queryKey: ['data'],
-    queryFn: fetchNewsData,
+    queryKey: ['data', newsId],
+    queryFn: fetchNewsData
+  });
+  const likesDislikesQuery = useQuery({
+    queryKey: ['likesDislikes', newsId],
+    queryFn: fetchLikesDislikes,
     refetchInterval: 3000
   });
   const handleBack = () => {
@@ -91,14 +100,14 @@ export default function NewsView() {
             <Typography variant='body2'>Published: {dateCreated}</Typography>
             <Stack direction='row' spacing={2}>
               <Badge
-                badgeContent={newsDataQuery?.data?.likes}
+                badgeContent={likesDislikesQuery?.data?.likes}
                 color='info'
                 showZero
               >
                 <ThumbUpOffAltIcon/>
               </Badge>
               <Badge
-                badgeContent={newsDataQuery?.data?.dislikes}
+                badgeContent={likesDislikesQuery?.data?.dislikes}
                 color='info'
                 showZero
               >
