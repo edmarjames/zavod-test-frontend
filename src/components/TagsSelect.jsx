@@ -63,6 +63,5 @@ export default function TagsSelect({ tags, handleChangeTag }) {
 TagsSelect.propTypes = {
   tags: PropTypes.array,
   handleChangeTag: PropTypes.func,
-  fullWidth: PropTypes.bool,
 };
 

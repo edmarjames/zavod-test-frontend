@@ -21,7 +21,7 @@ export default function Logout() {
         isAdmin: false
     });
     localStorage.clear();
-});
+  });
 
   return (
     <Navigate to='/' />

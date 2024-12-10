@@ -24,7 +24,6 @@ const columns = [
     headerName: 'ID',
     type: 'number',
     flex: 1,
-    // resizable: false,
     headerAlign: 'left',
     align: 'left'
   },
@@ -33,7 +32,6 @@ const columns = [
     headerName: 'Title',
     type: 'string',
     flex: 1,
-    // resizable: false,
     headerAlign: 'left',
     align: 'left'
   },
