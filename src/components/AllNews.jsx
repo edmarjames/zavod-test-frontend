@@ -53,7 +53,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -250,7 +250,7 @@ export default function AllNews() {
             </>
           )}
         </Stack>
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%', my: 2 }}>
           <Paper elevation={1}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
               <Tab label='News' {...a11yProps(0)} />
@@ -260,9 +260,8 @@ export default function AllNews() {
               <TagsSelect tags={tagsFilter} handleChangeTag={handleChangeTag}/>
               <Grid container spacing={3}>
                 {flattenedNews?.map((news) => (
-                  <Grid size={4}>
+                  <Grid key={news.id} size={4}>
                     <NewsCard
-                      key={news.id}
                       newsData={news}
                       handleDeleteNewsOpen={handleDeleteNewsOpen}
                       tagsFilter={tagsFilter}
