@@ -14,6 +14,7 @@ import { AppProvider }                      from './AppContext';
 import AllNews                              from './components/AllNews';
 import Logout                               from './components/Logout';
 import NewsView                             from './components/NewsView';
+import ErrorPage                            from './components/ErrorPage';
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
           <Route path='/news' element={<AllNews/>}/>
           <Route path='/news/:newsId' element={<NewsView/>}/>
           <Route path='/logout' element={<Logout/>}/>
+          <Route path='*' element={<ErrorPage/>}/>
         </Routes>
       </Router>
     </AppProvider>

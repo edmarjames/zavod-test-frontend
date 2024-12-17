@@ -15,6 +15,7 @@ import ArrowBackIcon                        from '@mui/icons-material/ArrowBack'
 import ThumbDownOffAltIcon                  from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbUpOffAltIcon                    from '@mui/icons-material/ThumbUpOffAlt';
 import {
+  Navigate,
   useNavigate,
   useParams,
 }                                           from 'react-router-dom';
@@ -57,6 +58,12 @@ export default function NewsView() {
     second: '2-digit'
   };
   const dateCreated = new Date(newsDataQuery?.data?.date_created).toLocaleDateString('en-US', options) || '';
+
+  if (newsDataQuery?.error !== null) {
+    return (
+      <Navigate to='/*' />
+    )
+  };
 
   return (
     <Container maxWidth='false'>
